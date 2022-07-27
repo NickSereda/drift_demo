@@ -23,7 +23,7 @@ class TodoData extends DataClass implements Insertable<TodoData> {
       todoDescription: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}todo_description'])!,
       isCompleted: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}todo_description'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}todo_completed'])!,
     );
   }
   @override
@@ -31,7 +31,7 @@ class TodoData extends DataClass implements Insertable<TodoData> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['todo_description'] = Variable<String>(todoDescription);
-    map['todo_description'] = Variable<bool>(isCompleted);
+    map['todo_completed'] = Variable<bool>(isCompleted);
     return map;
   }
 
@@ -112,7 +112,7 @@ class TodoCompanion extends UpdateCompanion<TodoData> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (todoDescription != null) 'todo_description': todoDescription,
-      if (isCompleted != null) 'todo_description': isCompleted,
+      if (isCompleted != null) 'todo_completed': isCompleted,
     });
   }
 
@@ -137,7 +137,7 @@ class TodoCompanion extends UpdateCompanion<TodoData> {
       map['todo_description'] = Variable<String>(todoDescription.value);
     }
     if (isCompleted.present) {
-      map['todo_description'] = Variable<bool>(isCompleted.value);
+      map['todo_completed'] = Variable<bool>(isCompleted.value);
     }
     return map;
   }
@@ -175,10 +175,10 @@ class $TodoTable extends Todo with TableInfo<$TodoTable, TodoData> {
       const VerificationMeta('isCompleted');
   @override
   late final GeneratedColumn<bool?> isCompleted = GeneratedColumn<bool?>(
-      'todo_description', aliasedName, false,
+      'todo_completed', aliasedName, false,
       type: const BoolType(),
       requiredDuringInsert: true,
-      defaultConstraints: 'CHECK (todo_description IN (0, 1))');
+      defaultConstraints: 'CHECK (todo_completed IN (0, 1))');
   @override
   List<GeneratedColumn> get $columns => [id, todoDescription, isCompleted];
   @override
@@ -201,11 +201,11 @@ class $TodoTable extends Todo with TableInfo<$TodoTable, TodoData> {
     } else if (isInserting) {
       context.missing(_todoDescriptionMeta);
     }
-    if (data.containsKey('todo_description')) {
+    if (data.containsKey('todo_completed')) {
       context.handle(
           _isCompletedMeta,
           isCompleted.isAcceptableOrUnknown(
-              data['todo_description']!, _isCompletedMeta));
+              data['todo_completed']!, _isCompletedMeta));
     } else if (isInserting) {
       context.missing(_isCompletedMeta);
     }

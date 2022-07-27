@@ -7,34 +7,39 @@ part 'todos_state.dart';
 
 class TodosCubit extends Cubit<TodosState> {
   TodosCubit()
-      : super(const TodosState(
-          todos: [],
-          status: Status.initial,
-        ));
+      : super(
+          const TodosState(
+            todos: [],
+            status: Status.initial,
+          ),
+        );
 
   final AppDb _appDb = AppDb();
 
   Future<void> fetchTodos() async {
-    // emit(state.copyWith(status: Status.updating));
+    emit(state.copyWith(status: Status.updating));
 
-    // final List<TodoData> todosData = await _appDb.getTodos();
-    // final List<TodoCompanion> todosCompanion =
-    //     todosData.map((e) => e.toCompanion(false)).toList();
-    // emit(state.copyWith(todos: todosCompanion, status: Status.updated));
+    final List<TodoData> todosData = await _appDb.getTodos();
+    final List<TodoCompanion> todosCompanion =
+        todosData.map((e) => e.toCompanion(false)).toList();
+    emit(state.copyWith(todos: todosCompanion, status: Status.updated));
   }
 
   Future<void> addTodo(TodoCompanion entity) async {
-     emit(state.copyWith(status: Status.updating));
+    emit(state.copyWith(status: Status.updating));
+
+    _appDb.addTodo(entity);
 
     emit(state.copyWith(todos: [
-      ...state.todos, entity,
+      ...state.todos,
+      entity,
     ], status: Status.updated));
   }
 
   Future<void> removeTodo(TodoCompanion entity) async {
     emit(state.copyWith(status: Status.updating));
 
-    // _appDb.removeTodo(entity.id.value);
+    _appDb.removeTodo(entity.id.value);
 
     List<TodoCompanion> todos = state.todos..remove(entity);
     emit(state.copyWith(todos: todos, status: Status.updated));
@@ -46,8 +51,11 @@ class TodosCubit extends Cubit<TodosState> {
   }) async {
     emit(state.copyWith(status: Status.updating));
 
-    final TodoCompanion updatedTodo =
-        state.todos[index].copyWith(isCompleted: Value(isCompleted!));
+
+    final TodoCompanion updatedTodo = state.todos[index].copyWith(isCompleted: Value(isCompleted!));
+
+    _appDb.updateTodo(updatedTodo);
+
     final List<TodoCompanion> todos = state.todos;
     todos[index] = updatedTodo;
 

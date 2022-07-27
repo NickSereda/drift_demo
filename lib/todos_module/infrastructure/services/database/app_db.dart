@@ -31,8 +31,8 @@ class AppDb extends _$AppDb {
     return await (select(todo)..where((tbl) => tbl.id.equals(id))).getSingle();
   }
 
-  Future<bool> updateTodo(TodoCompanion entity) async {
-    return await update(todo).replace(entity);
+  Future<bool> updateTodo(TodoCompanion newEntity) async {
+    return await update(todo).replace(newEntity);
   }
 
   Future<int> addTodo(TodoCompanion entity) async {

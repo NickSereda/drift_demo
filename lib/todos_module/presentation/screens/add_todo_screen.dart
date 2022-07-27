@@ -40,6 +40,10 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Add your todo here',
+                ),
                 controller: _textEditingController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -48,6 +52,7 @@ class _AddTodoScreenState extends State<AddTodoScreen> {
                   return null;
                 },
               ),
+             const SizedBox(height: 30),
               ElevatedButton.icon(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
