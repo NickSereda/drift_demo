@@ -5,8 +5,8 @@ import 'package:drift_demo/todos_module/presentation/widgets/todo_list_item.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          context.router.pushNamed(AddTodoScreen.path);
+          context.router.pushNamed(AddTodoPage.path);
         },
       ),
     );

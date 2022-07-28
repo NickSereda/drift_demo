@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
-class AddTodoScreen extends StatefulWidget {
+class AddTodoPage extends StatefulWidget {
   static const String path = '/add_todo_screen';
 
-  const AddTodoScreen({Key? key}) : super(key: key);
+  const AddTodoPage({Key? key}) : super(key: key);
 
   @override
-  State<AddTodoScreen> createState() => _AddTodoScreenState();
+  State<AddTodoPage> createState() => _AddTodoPageState();
 }
 
-class _AddTodoScreenState extends State<AddTodoScreen> {
+class _AddTodoPageState extends State<AddTodoPage> {
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _textEditingController;
