@@ -229,6 +229,7 @@ class $TodoTable extends Todo with TableInfo<$TodoTable, TodoData> {
 abstract class _$AppDb extends GeneratedDatabase {
   _$AppDb(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $TodoTable todo = $TodoTable(this);
+  late final TodoDao todoDao = TodoDao(this as AppDb);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override

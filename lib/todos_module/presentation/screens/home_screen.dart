@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
             itemCount: state.todos.length,
             itemBuilder: (context, index) {
               return Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(18),
                   child: Dismissible(
                     direction: DismissDirection.endToStart,
                     onDismissed: (direction) {
