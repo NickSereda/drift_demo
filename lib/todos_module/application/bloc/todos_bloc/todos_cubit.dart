@@ -8,7 +8,6 @@ part 'todos_state.dart';
 
 @lazySingleton
 class TodosCubit extends Cubit<TodosState> {
-
   final AppDb _appDb;
 
   TodosCubit(this._appDb)
@@ -20,17 +19,17 @@ class TodosCubit extends Cubit<TodosState> {
         );
 
   Future<void> fetchTodos() async {
-    // emit(state.copyWith(status: Status.updating));
-    // final List<TodoData> todosData = await _appDb.getTodos();
-    // final List<TodoCompanion> todosCompanion =
-    //     todosData.map((e) => e.toCompanion(false)).toList();
-    // emit(state.copyWith(todos: todosCompanion, status: Status.updated));
+    emit(state.copyWith(status: Status.updating));
+    final List<TodoData> todosData = await _appDb.todoDao.getTodos();
+    final List<TodoCompanion> todosCompanion =
+        todosData.map((e) => e.toCompanion(false)).toList();
+    emit(state.copyWith(todos: todosCompanion, status: Status.updated));
   }
 
   Future<void> addTodo(TodoCompanion entity) async {
     emit(state.copyWith(status: Status.updating));
 
-    // _appDb.addTodo(entity);
+    _appDb.todoDao.addTodo(entity);
 
     emit(state.copyWith(todos: [
       ...state.todos,
@@ -41,7 +40,7 @@ class TodosCubit extends Cubit<TodosState> {
   Future<void> removeTodo(TodoCompanion entity) async {
     emit(state.copyWith(status: Status.updating));
 
-    // _appDb.removeTodo(entity.id.value);
+    _appDb.todoDao.removeTodo(entity.id.value);
 
     List<TodoCompanion> todos = state.todos..remove(entity);
     emit(state.copyWith(todos: todos, status: Status.updated));
@@ -53,10 +52,10 @@ class TodosCubit extends Cubit<TodosState> {
   }) async {
     emit(state.copyWith(status: Status.updating));
 
+    final TodoCompanion updatedTodo =
+        state.todos[index].copyWith(isCompleted: Value(isCompleted!));
 
-    final TodoCompanion updatedTodo = state.todos[index].copyWith(isCompleted: Value(isCompleted!));
-
-    // _appDb.updateTodo(updatedTodo);
+    _appDb.todoDao.updateTodo(updatedTodo);
 
     final List<TodoCompanion> todos = state.todos;
     todos[index] = updatedTodo;
