@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:drift_demo/todos_module/application/bloc/todos_cubit.dart';
+import 'package:drift_demo/todos_module/application/bloc/todos_bloc/todos_cubit.dart';
 import 'package:drift_demo/todos_module/infrastructure/services/database/app_db.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
