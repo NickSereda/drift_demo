@@ -63,9 +63,4 @@ class TodosCubit extends Cubit<TodosState> {
     emit(state.copyWith(todos: todos, status: Status.updated));
   }
 
-  @override
-  Future<void> close() {
-    _appDb.close();
-    return super.close();
-  }
 }
