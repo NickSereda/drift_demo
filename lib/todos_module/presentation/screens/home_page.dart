@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:drift_demo/todos_module/application/bloc/todos_bloc/todos_cubit.dart';
-import 'package:drift_demo/todos_module/presentation/screens/add_todo_screen.dart';
+import 'package:drift_demo/todos_module/presentation/screens/add_todo_page.dart';
 import 'package:drift_demo/todos_module/presentation/widgets/todo_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
