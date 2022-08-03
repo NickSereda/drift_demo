@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<TodosCubit>(
           create: (context) => getIt<TodosCubit>()..fetchTodos(),
         ),
-        BlocProvider<TodoFormCubit>(create: (context) => getIt<TodoFormCubit>()),
+        BlocProvider<TodoFormCubit>(create: (context) => TodoFormCubit()),
       ],
       child: MaterialApp.router(
         theme: ThemeData.dark(),

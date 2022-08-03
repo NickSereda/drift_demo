@@ -1,8 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:drift_demo/todos_module/application/bloc/todo_form_bloc/todo_form_cubit.dart';
+import 'package:drift_demo/todos_module/application/bloc/todos_bloc/todos_cubit.dart';
+import 'package:drift_demo/todos_module/infrastructure/services/database/app_db.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:drift/drift.dart' as drift;
 
 class AddTodoPage extends StatefulWidget {
   static const String path = '/add_todo_screen';
@@ -34,10 +37,21 @@ class _AddTodoPageState extends State<AddTodoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<TodoFormCubit, TodoFormState>(
+      body: BlocConsumer<TodoFormCubit, TodoFormState>(
+        listener: (context, state) {
+          if (state.formzStatus == FormzStatus.submissionSuccess) {
+            final TodoCompanion entity = TodoCompanion(
+              todoDescription: drift.Value(state.todoDescription.value),
+              isCompleted: const drift.Value(false),
+            );
+            context.read<TodosCubit>().addTodo(entity);
+            _textEditingController.clear();
+            context.read<TodoFormCubit>().clearForm();
+            context.router.pop();
+          }
+        },
         builder: (context, state) {
           return Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             key: _formKey,
             child: Padding(
               padding: const EdgeInsets.all(18.0),
@@ -48,8 +62,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       labelText: 'Add todo',
-                      helperText: '',
-                      errorText: state.formzStatus.isInvalid
+                      errorText: state.todoDescription.invalid
                           ? state.todoDescription.error?.text
                           : null,
                     ),
@@ -63,12 +76,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
                     onPressed: () {
                       context
                           .read<TodoFormCubit>()
-                          .onSubmit(_textEditingController)
-                          .then((success) {
-                        if (success) {
-                          context.router.pop();
-                        }
-                      });
+                          .onSubmit();
                     },
                     icon: const Icon(Icons.save),
                     label: const Text("Save item"),

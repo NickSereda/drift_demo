@@ -3,7 +3,7 @@ part of 'todo_form_cubit.dart';
 
 enum TodoValidationError { empty, notEnoughChars }
 
-class TodoFormState extends Equatable with FormzMixin {
+class TodoFormState with FormzMixin {
 
   TodoFormState({
     this.todoDescription = const TodoDescription.pure(),
@@ -26,8 +26,6 @@ class TodoFormState extends Equatable with FormzMixin {
   @override
   List<FormzInput> get inputs => [todoDescription];
 
-  @override
-  List<Object?> get props => [todoDescription, formzStatus];
 
 }
 

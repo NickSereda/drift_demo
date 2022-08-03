@@ -6,7 +6,7 @@ import 'package:injectable/injectable.dart';
 
 part 'todos_state.dart';
 
-@lazySingleton
+@injectable
 class TodosCubit extends Cubit<TodosState> {
   final AppDb _appDb;
 
