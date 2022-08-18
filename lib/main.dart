@@ -8,6 +8,10 @@ import 'package:get_it/get_it.dart';
 
 GetIt getIt = GetIt.instance;
 
+// make sure you don't initiate your router
+// inside of the build function.
+final appRouter = AppRouter();
+
 void main() {
   configureInjection();
   runApp(MyApp());
@@ -15,10 +19,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
    MyApp({Key? key}) : super(key: key);
-
-  // make sure you don't initiate your router
-  // inside of the build function.
-   final _appRouter = AppRouter();
 
    @override
   Widget build(BuildContext context) {
@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         theme: ThemeData.dark(),
-        routerDelegate: _appRouter.delegate(),
-        routeInformationParser: _appRouter.defaultRouteParser(),
+        routerDelegate: appRouter.delegate(),
+        routeInformationParser: appRouter.defaultRouteParser(),
       ),
     );
   }
