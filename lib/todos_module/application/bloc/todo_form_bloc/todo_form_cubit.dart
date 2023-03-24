@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:formz/formz.dart';
+
 part 'todo_form_state.dart';
 
 class TodoFormCubit extends Cubit<TodoFormState> {
@@ -29,8 +30,10 @@ class TodoFormCubit extends Cubit<TodoFormState> {
   }
 
   void clearForm() {
-    emit(state.copyWith(
-        todoDescription: const TodoDescription.pure(''),
-        formzStatus: FormzStatus.pure));
+    emit(
+      state.copyWith(
+          todoDescription: const TodoDescription.pure(''),
+          formzStatus: FormzStatus.pure),
+    );
   }
 }

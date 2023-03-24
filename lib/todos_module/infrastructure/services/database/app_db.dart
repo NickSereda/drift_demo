@@ -19,11 +19,11 @@ class AppDb extends _$AppDb {
     QueryExecutor? queryExecutor,
     isTestDb = false,
   }) : super(
-          !isTestDb ? openConnection() : queryExecutor!,
+          !isTestDb ? _openConnection() : queryExecutor!,
         );
 
   /// Method to be used as QueryExecutor in prod environment
-  static openConnection() {
+  static _openConnection() {
     return LazyDatabase(() async {
       final dbFolder = await getApplicationDocumentsDirectory();
       final File file = File(join(dbFolder.path, "todos.sqlite"));

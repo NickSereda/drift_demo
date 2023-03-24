@@ -6,7 +6,6 @@ part 'todo_dao.g.dart';
 
 @DriftAccessor(tables: [Todo])
 class TodoDao extends DatabaseAccessor<AppDb> with _$TodoDaoMixin {
-
   final AppDb db;
 
   TodoDao(this.db) : super(db);
@@ -28,7 +27,10 @@ class TodoDao extends DatabaseAccessor<AppDb> with _$TodoDaoMixin {
   }
 
   Future<int> removeTodo(int id) async {
-    return await (delete(todo)..where((tbl) => tbl.id.equals(id))).go();
+    return await (delete(todo)
+          ..where(
+            (tbl) => tbl.id.equals(id),
+          ))
+        .go();
   }
-
 }
