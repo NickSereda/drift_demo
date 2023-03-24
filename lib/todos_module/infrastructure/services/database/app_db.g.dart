@@ -3,7 +3,7 @@
 part of 'app_db.dart';
 
 // **************************************************************************
-// MoorGenerator
+// DriftDatabaseGenerator
 // **************************************************************************
 
 // ignore_for_file: type=lint
@@ -11,21 +11,10 @@ class TodoData extends DataClass implements Insertable<TodoData> {
   final int id;
   final String todoDescription;
   final bool isCompleted;
-  TodoData(
+  const TodoData(
       {required this.id,
       required this.todoDescription,
       required this.isCompleted});
-  factory TodoData.fromData(Map<String, dynamic> data, {String? prefix}) {
-    final effectivePrefix = prefix ?? '';
-    return TodoData(
-      id: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
-      todoDescription: const StringType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}todo_description'])!,
-      isCompleted: const BoolType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}todo_completed'])!,
-    );
-  }
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -160,23 +149,23 @@ class $TodoTable extends Todo with TableInfo<$TodoTable, TodoData> {
   $TodoTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: const IntType(),
+      type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
   final VerificationMeta _todoDescriptionMeta =
       const VerificationMeta('todoDescription');
   @override
-  late final GeneratedColumn<String?> todoDescription =
-      GeneratedColumn<String?>('todo_description', aliasedName, false,
-          type: const StringType(), requiredDuringInsert: true);
+  late final GeneratedColumn<String> todoDescription = GeneratedColumn<String>(
+      'todo_description', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   final VerificationMeta _isCompletedMeta =
       const VerificationMeta('isCompleted');
   @override
-  late final GeneratedColumn<bool?> isCompleted = GeneratedColumn<bool?>(
+  late final GeneratedColumn<bool> isCompleted = GeneratedColumn<bool>(
       'todo_completed', aliasedName, false,
-      type: const BoolType(),
+      type: DriftSqlType.bool,
       requiredDuringInsert: true,
       defaultConstraints: 'CHECK (todo_completed IN (0, 1))');
   @override
@@ -216,8 +205,15 @@ class $TodoTable extends Todo with TableInfo<$TodoTable, TodoData> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   TodoData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return TodoData.fromData(data,
-        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TodoData(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      todoDescription: attachedDatabase.options.types.read(
+          DriftSqlType.string, data['${effectivePrefix}todo_description'])!,
+      isCompleted: attachedDatabase.options.types
+          .read(DriftSqlType.bool, data['${effectivePrefix}todo_completed'])!,
+    );
   }
 
   @override
@@ -227,11 +223,12 @@ class $TodoTable extends Todo with TableInfo<$TodoTable, TodoData> {
 }
 
 abstract class _$AppDb extends GeneratedDatabase {
-  _$AppDb(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  _$AppDb(QueryExecutor e) : super(e);
   late final $TodoTable todo = $TodoTable(this);
   late final TodoDao todoDao = TodoDao(this as AppDb);
   @override
-  Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
+  Iterable<TableInfo<Table, dynamic>> get allTables =>
+      allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [todo];
 }

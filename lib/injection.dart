@@ -5,4 +5,4 @@ import 'package:drift_demo/injection.config.dart';
 
 
 @injectableInit
-void configureInjection() => $initGetIt(getIt);
+void configureInjection() => getIt.init();

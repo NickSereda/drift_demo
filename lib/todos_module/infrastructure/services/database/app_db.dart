@@ -10,19 +10,26 @@ import 'package:path_provider/path_provider.dart';
 
 part 'app_db.g.dart';
 
-LazyDatabase _openConnection() {
-
-  return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final File file = File(join(dbFolder.path, "todos.sqlite"));
-    return NativeDatabase(file);
-  });
-}
-
 @singleton
 @DriftDatabase(tables: [Todo], daos: [TodoDao])
 class AppDb extends _$AppDb {
-  AppDb() : super(_openConnection());
+  AppDb({
+    // For testing purposes, to be able to pass
+    // NativeDatabase.memory() in tests
+    QueryExecutor? queryExecutor,
+    isTestDb = false,
+  }) : super(
+          !isTestDb ? openConnection() : queryExecutor!,
+        );
+
+  /// Method to be used as QueryExecutor in prod environment
+  static openConnection() {
+    return LazyDatabase(() async {
+      final dbFolder = await getApplicationDocumentsDirectory();
+      final File file = File(join(dbFolder.path, "todos.sqlite"));
+      return NativeDatabase(file);
+    });
+  }
 
   @override
   int get schemaVersion => 1;
@@ -32,5 +39,4 @@ class AppDb extends _$AppDb {
   Future<void> close() {
     return super.close();
   }
-
 }
